@@ -4,6 +4,11 @@ This game is a simple implementation of the classic word-guessing game, Hangman.
 
 More info can be found here: https://en.wikipedia.org/wiki/Hangman_(game)
 
+This program was compiled with g++
+
+To run program: 
+ *  Type "./a.out" into the terminal
+
 FEATURES TO ADD:
  *  Fix the AI
  *  Consolidate the turn-system

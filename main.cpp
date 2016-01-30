@@ -27,12 +27,10 @@ int countLines(std::vector<std::string> words) {
     return words.size();
 }
 
-
-
 std::string getWord() {
     std::ifstream words_file;
     try {
-        words_file.open("word.txt");
+        words_file.open("words.txt");
     }
     catch (...) {//words_file.fail()) {
         std::cout << "Error" << std::endl;

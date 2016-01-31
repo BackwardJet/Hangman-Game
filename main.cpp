@@ -8,25 +8,25 @@
 
 bool run;
 
-
+    
 /*
  * FEATURES TO ADD:
- *  - Fix the AI
  *  - Consolidate the turn-system
  *  - Clean up code/split into files
  *  - Error checking for the files (AI) (words.txt)
  *  - Error checking on input (Does the word exist, does it only contain letters, etc.)
  *  - Hints/definitions of words
- *  - Random word generator
  *  - Allow Player 2 to guess the word right away
  *  - Have the hangman get drawn
+ *  - Check lowercase/uppercase letters for player 2
+ *      - (E.g. Word is: Foo and they type lowercase f --> Should be valid)
  */
 
 
 int countLines(std::vector<std::string> words) {
     return words.size();
 }
-
+    
 std::string getWord() {
     std::ifstream words_file;
     try {
@@ -36,7 +36,7 @@ std::string getWord() {
         std::cout << "Error" << std::endl;
         run = false;
     }
-
+        
     std::string line;
 
     std::vector<std::string> words;
@@ -48,7 +48,7 @@ std::string getWord() {
     srand(time(NULL));
 
     int number_of_words = countLines(words);
-    std::cout << number_of_words << std::endl;
+    // std::cout << number_of_words << std::endl;
 
     std::string word = words.at(rand() % number_of_words);
 
@@ -56,8 +56,8 @@ std::string getWord() {
     
 }
 
-void runAI() {
-    getWord();
+std::string runAI() {
+    return (getWord());
 }
 
 
@@ -122,10 +122,11 @@ int main() {
 
 
         std::string hidden_word = "";
+        std::string input;
 
         if (gameMode == "1") {
             
-            std::string input;
+
             std::cout << "=========PLAYER 1'S TURN=========" << std::endl;
             std::cout << "Give me a word: ";
             std::cin >> input;
@@ -178,7 +179,6 @@ int main() {
 
 
 
-            //TO-DO: implement turns for 2-player mode
             if (num_tries != 0) {
                 std::cout << "Player 2 wins!" << std::endl;
             }
@@ -189,15 +189,69 @@ int main() {
             run = false;
         }
         else if (gameMode == "2") {
-            std::cout << "THIS METHOD OF GAME-PLAY IS UNSUPPORTED!" << std::endl;
-            // runAI();
+            //std::cout << "THIS METHOD OF GAME-PLAY IS UNSUPPORTED!" << std::endl;
+            input = runAI();
+            std::cout << "word chosen by computer is: " << input << std::endl;
+            for (int j = 0; j < input.length(); j++) {
+                hidden_word += "_";
+            }
+
+
+            std::cout << "=========PLAYER 2'S TURN=========" << std::endl;
+
+            bool game_over = false;
+
+            int num_tries = input.length() + 1;
+            while ((num_tries > 0) && (game_over == false)) {
+                char letter;
+                std::cout << "Number of tries left: " << num_tries << std::endl;
+                std::cout << "Give me a letter you think is in the word: ";
+                std::cin >> letter;
+
+                std::size_t found = input.find(letter);
+                if (found != std::string::npos) {
+                    std::cout << "That letter is in the word!" << std::endl;
+                    std::vector<int> characterLocations = findLocation(input,letter);
+
+                    for (int i = 0; i < characterLocations.size(); i++) {
+                        std::cout << characterLocations[i] << std::endl;;
+                    }
+
+                    hidden_word = updateWord(hidden_word, characterLocations, letter);
+                    if (hidden_word == input) {
+                        game_over = true;
+                        break;
+                    }
+                    std::cout << "Updated Word: " << hidden_word << std::endl;
+
+
+
+                }
+                else {
+                    std::cout << "That letter is not in the word." << std::endl;
+                }
+
+                num_tries--;
+            }
+
+
+
+
+            if (num_tries != 0) {
+                std::cout << "You win!" << std::endl;
+            }
+            else {
+                std::cout << "The computer wins!" << std::endl;
+            }
+            std::cout << "The word the computer gave was: " << input  << std::endl;
+            run = false;
             run = false;
         }
         else if (gameMode == "quit") {
             run = false;
         }
         else {
-            std::cout << "Please input only 1 or 2." << std::endl;
+            std::cout << "Please input only 1 or 2 or 'quit'." << std::endl;
         }
 
     }

@@ -89,6 +89,19 @@ std::string updateWord(std::string word, std::vector<int> characterLocations, ch
     return result;
 }
 
+bool has_non_alpha(std::string word) {
+    char c;
+    for (int i = 0; i < word.length(); i++) {
+        c = word.at(i);
+
+        if (! ( ( c >= 'a' && c <= 'z' ) ||
+                    ( c >= 'A' && c <= 'Z') ) ) {
+            return false;
+        }
+    }
+    return true;
+}
+
 std::vector<int> findLocation(std::string sample, char findIt)
 {
     std::vector<int> characterLocations;
@@ -98,6 +111,12 @@ std::vector<int> findLocation(std::string sample, char findIt)
 
     return characterLocations;
 }
+
+void toLower(std::string& word) {
+    std::transform(word.begin(), word.end(), word.begin(), ::tolower);
+}
+
+
 
 int main() {
     std::cout << "Welcome to Hangman!" << std::endl;
@@ -125,25 +144,39 @@ int main() {
         std::string input;
 
         if (gameMode == "1") {
-            
+            bool validWord = false;
 
             std::cout << "=========PLAYER 1'S TURN=========" << std::endl;
-            std::cout << "Give me a word: ";
-            std::cin >> input;
-            for (int i = 0; i < 100; i++) { // clears the terminal
-                std::cout << "\n" << std::endl;
+            while (validWord == false) {
+
+                std::cout << "Give me a word: ";
+                std::cin >> input;
+                validWord = has_non_alpha(input);
+                if (validWord) {
+                    for (int i = 0; i < 100; i++) { // clears the terminal
+                        std::cout << "\n" << std::endl;
+                    }
+                    break;
+                }
+                std::cout << "Only letters are allowed in words." << std::endl;
             }
 
             for (int j = 0; j < input.length(); j++) {
                 hidden_word += "_";
             }
 
-
+            toLower(input);
+   
             std::cout << "=========PLAYER 2'S TURN=========" << std::endl;
 
             bool game_over = false;
 
             int num_tries = input.length() + 1;
+
+            std::cout << "The word that your friend gave was " << input.length() << " letters long." << std::endl;
+
+            std::cout << "Updated Word: " << hidden_word << std::endl;
+
             while ((num_tries > 0) && (game_over == false)) {
                 char letter;
                 std::cout << "Number of tries left: " << num_tries << std::endl;
@@ -155,9 +188,7 @@ int main() {
                     std::cout << "That letter is in the word!" << std::endl;
                     std::vector<int> characterLocations = findLocation(input,letter);
 
-                    for (int i = 0; i < characterLocations.size(); i++) {
-                        std::cout << characterLocations[i] << std::endl;;
-                    }
+
 
                     hidden_word = updateWord(hidden_word, characterLocations, letter);
                     if (hidden_word == input) {

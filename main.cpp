@@ -5,6 +5,7 @@
 #include <vector>
 #include <ctime>
 #include <algorithm>
+#include <sstream>
 
 bool run;
 
@@ -89,7 +90,7 @@ std::string updateWord(std::string word, std::vector<int> characterLocations, ch
     return result;
 }
 
-bool has_non_alpha(std::string word) {
+bool has_only_alpha(std::string word) {
     char c;
     for (int i = 0; i < word.length(); i++) {
         c = word.at(i);
@@ -140,19 +141,20 @@ int main() {
         */
 
 
+
         std::string hidden_word = "";
         std::string input;
 
         if (gameMode == "1") {
-            bool validWord = false;
+            bool isValidWord = false;
 
             std::cout << "=========PLAYER 1'S TURN=========" << std::endl;
-            while (validWord == false) {
+            while (isValidWord == false) {
 
                 std::cout << "Give me a word: ";
                 std::cin >> input;
-                validWord = has_non_alpha(input);
-                if (validWord) {
+                isValidWord = has_only_alpha(input);
+                if (isValidWord) {
                     for (int i = 0; i < 100; i++) { // clears the terminal
                         std::cout << "\n" << std::endl;
                     }
@@ -182,7 +184,16 @@ int main() {
                 std::cout << "Number of tries left: " << num_tries << std::endl;
                 std::cout << "Give me a letter you think is in the word: ";
                 std::cin >> letter;
+                
+                
+                std::stringstream stream;
+                std::string str;
 
+                stream << letter;
+                stream >> str;
+
+                toLower(str);
+                            
                 std::size_t found = input.find(letter);
                 if (found != std::string::npos) {
                     std::cout << "That letter is in the word!" << std::endl;
@@ -220,7 +231,7 @@ int main() {
             run = false;
         }
         else if (gameMode == "2") {
-            //std::cout << "THIS METHOD OF GAME-PLAY IS UNSUPPORTED!" << std::endl;
+           
             input = runAI();
             std::cout << "word chosen by computer is: " << input << std::endl;
             for (int j = 0; j < input.length(); j++) {
@@ -292,3 +303,5 @@ int main() {
 
     return 0;
 }
+
+

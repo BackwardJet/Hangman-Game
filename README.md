@@ -17,9 +17,8 @@ FEATURES TO ADD:
  *  Allow Player 2 to guess the word right away
  *  Have the hangman get drawn
  *  Error checking on input (Does the word exist, etc.)
- *  Check lowercase/uppercase letters for player 2
-    *  (E.g. Word is: Foo and they type lowercase f --> Should be valid)
+ 
 
-Ver 1.0.2
+Ver 1.0.3
 
 Created by: Tej Vuligonda

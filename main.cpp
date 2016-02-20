@@ -128,7 +128,7 @@ int main() {
 
         std::string gameMode;
 
-        std::cout << "Would you like to play against:\n 1) A friend\n 2) The computer? (currently unsupported)" << std::endl;
+        std::cout << "Would you like to play against:\n 1) A friend\n 2) The computer?" << std::endl;
         std::cout << "Type 'quit' to end the game." << std::endl;
 
         std::cin >> gameMode;
@@ -233,7 +233,7 @@ int main() {
         else if (gameMode == "2") {
            
             input = runAI();
-            std::cout << "word chosen by computer is: " << input << std::endl;
+            //std::cout << "word chosen by computer is: " << input << std::endl;
             for (int j = 0; j < input.length(); j++) {
                 hidden_word += "_";
             }
@@ -246,34 +246,48 @@ int main() {
             int num_tries = input.length() + 1;
             while ((num_tries > 0) && (game_over == false)) {
                 char letter;
+                std::cout << "If you would like to guess the word, press 1." << std::endl;
                 std::cout << "Number of tries left: " << num_tries << std::endl;
                 std::cout << "Give me a letter you think is in the word: ";
                 std::cin >> letter;
-
-                std::size_t found = input.find(letter);
-                if (found != std::string::npos) {
-                    std::cout << "That letter is in the word!" << std::endl;
-                    std::vector<int> characterLocations = findLocation(input,letter);
-
-                    for (int i = 0; i < characterLocations.size(); i++) {
-                        std::cout << characterLocations[i] << std::endl;;
+                
+                if (letter == '1')
+                {
+                    std::string guess;
+                    std::cout << "What is your guess?" << std::endl;
+                    std::cin >> guess;
+                    if (input == guess) {
+                        std::cout << "You guessed the word right!" << std::endl;
+                        num_tries = -1;
                     }
-
-                    hidden_word = updateWord(hidden_word, characterLocations, letter);
-                    if (hidden_word == input) {
-                        game_over = true;
-                        break;
-                    }
-                    std::cout << "Updated Word: " << hidden_word << std::endl;
-
-
 
                 }
                 else {
-                    std::cout << "That letter is not in the word." << std::endl;
-                }
+                    std::size_t found = input.find(letter);
+                    if (found != std::string::npos) {
+                        std::cout << "That letter is in the word!" << std::endl;
+                        std::vector<int> characterLocations = findLocation(input,letter);
 
-                num_tries--;
+                        for (int i = 0; i < characterLocations.size(); i++) {
+                            std::cout << characterLocations[i] << std::endl;;
+                        }
+
+                        hidden_word = updateWord(hidden_word, characterLocations, letter);
+                        if (hidden_word == input) {
+                            game_over = true;
+                            break;
+                        }
+                        std::cout << "Updated Word: " << hidden_word << std::endl;
+
+
+
+                    }
+                    else {
+                        std::cout << "That letter is not in the word." << std::endl;
+                    }
+
+                    num_tries--;
+                }
             }
 
 
@@ -286,7 +300,6 @@ int main() {
                 std::cout << "The computer wins!" << std::endl;
             }
             std::cout << "The word the computer gave was: " << input  << std::endl;
-            run = false;
             run = false;
         }
         else if (gameMode == "quit") {

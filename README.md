@@ -14,11 +14,12 @@ FEATURES TO ADD:
  *  Error checking for the files (AI) (words.txt)
  *  Error checking on input
  *  Hints/definitions of words
- *  Allow Player 2 to guess the word right away
+ *  Allow Player 2 to guess the word right away in human-vs.-human mode
  *  Have the hangman get drawn
  *  Error checking on input (Does the word exist, etc.)
- 
+ *  Check lowercase/uppercase letters for player 2
+    *  (E.g. Word is: Foo and they type lowercase f --> Should be valid)
 
-Ver 1.0.3
+Ver 1.0.2
 
 Created by: Tej Vuligonda
